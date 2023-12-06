@@ -1,4 +1,4 @@
--- Combine Aggregated Outputs
+-- Combine Metrics
 -- Compute Metrics via Expressions
 SELECT
   CAST(MAX(subq_15.bookings) AS FLOAT64) / CAST(NULLIF(MAX(subq_20.listings), 0) AS FLOAT64) AS bookings_per_listing

@@ -23,8 +23,7 @@
                     <!-- include_spec =                           -->
                     <!--   {'class': 'MeasureSpec',               -->
                     <!--    'element_name': 'listings',           -->
-                    <!--    'non_additive_dimension_spec': None,  -->
-                    <!--    'fill_nulls_with': None}              -->
+                    <!--    'non_additive_dimension_spec': None}  -->
                     <!-- include_spec =                                            -->
                     <!--   {'class': 'DimensionSpec',                              -->
                     <!--    'element_name': 'capacity_latest',                     -->
@@ -52,8 +51,7 @@
                             <!-- include_spec =                           -->
                             <!--   {'class': 'MeasureSpec',               -->
                             <!--    'element_name': 'listings',           -->
-                            <!--    'non_additive_dimension_spec': None,  -->
-                            <!--    'fill_nulls_with': None}              -->
+                            <!--    'non_additive_dimension_spec': None}  -->
                             <!-- include_spec =                       -->
                             <!--   {'class': 'LinklessEntitySpec',    -->
                             <!--    'element_name': 'cyclic_entity',  -->

@@ -18,7 +18,7 @@
         <!-- where = None -->
         <!-- distinct = False -->
         <SqlSelectStatementNode>
-            <!-- description = Combine Aggregated Outputs -->
+            <!-- description = Combine Metrics -->
             <!-- node_id = ss_23 -->
             <!-- col0 =                                                                            -->
             <!--   {'class': 'SqlSelectColumn',                                                    -->

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Optional, Sequence
+from typing import Sequence
 
 from dbt_semantic_interfaces.call_parameter_sets import (
     DimensionCallParameterSet,
@@ -10,7 +10,6 @@ from dbt_semantic_interfaces.call_parameter_sets import (
 from dbt_semantic_interfaces.naming.dundered import DunderedNameFormatter
 from dbt_semantic_interfaces.references import DimensionReference, EntityReference, TimeDimensionReference
 from dbt_semantic_interfaces.type_enums import TimeGranularity
-from dbt_semantic_interfaces.type_enums.date_part import DatePart
 
 from metricflow.specs.specs import DEFAULT_TIME_GRANULARITY, DimensionSpec, TimeDimensionSpec
 
@@ -36,21 +35,16 @@ class DimensionSpecResolver:
         )
 
     def resolve_time_dimension_spec(
-        self,
-        name: str,
-        time_granularity: Optional[TimeGranularity],
-        entity_path: Sequence[str],
-        date_part: Optional[DatePart],
+        self, name: str, time_granularity_name: TimeGranularity, entity_path: Sequence[str]
     ) -> TimeDimensionSpec:
         """Resolve TimeDimension spec with the call_parameter_sets."""
         structured_name = DunderedNameFormatter.parse_name(name)
         call_parameter_set = TimeDimensionCallParameterSet(
             time_dimension_reference=TimeDimensionReference(element_name=structured_name.element_name),
-            time_granularity=time_granularity,
+            time_granularity=time_granularity_name,
             entity_path=(
                 tuple(EntityReference(element_name=arg) for arg in entity_path) + structured_name.entity_links
             ),
-            date_part=date_part,
         )
         assert call_parameter_set in self._call_parameter_sets.time_dimension_call_parameter_sets
         return TimeDimensionSpec(
@@ -62,5 +56,4 @@ class DimensionSpecResolver:
                 if call_parameter_set.time_granularity is not None
                 else DEFAULT_TIME_GRANULARITY
             ),
-            date_part=call_parameter_set.date_part,
         )
