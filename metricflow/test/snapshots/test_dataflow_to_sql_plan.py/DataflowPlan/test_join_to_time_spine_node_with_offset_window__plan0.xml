@@ -37,8 +37,7 @@
                         <!-- include_spec =                           -->
                         <!--   {'class': 'MeasureSpec',               -->
                         <!--    'element_name': 'booking_value',      -->
-                        <!--    'non_additive_dimension_spec': None,  -->
-                        <!--    'fill_nulls_with': None}              -->
+                        <!--    'non_additive_dimension_spec': None}  -->
                         <!-- include_spec =                               -->
                         <!--   {'class': 'TimeDimensionSpec',             -->
                         <!--    'element_name': 'metric_time',            -->

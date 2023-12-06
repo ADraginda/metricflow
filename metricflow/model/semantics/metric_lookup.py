@@ -20,6 +20,8 @@ from metricflow.protocols.semantics import MetricAccessor
 from metricflow.specs.column_assoc import ColumnAssociationResolver
 from metricflow.specs.specs import (
     LinkableInstanceSpec,
+    MeasureSpec,
+    MetricInputMeasureSpec,
     MetricSpec,
 )
 from metricflow.specs.where_filter_transform import WhereSpecFactory
@@ -104,9 +106,14 @@ class MetricLookup(MetricAccessor):  # noqa: D
                 )
         self._metrics[metric_reference] = metric
 
-    def configured_input_measure_for_metric(  # noqa: D
-        self, metric_reference: MetricReference
-    ) -> Optional[MetricInputMeasure]:
+    def configured_input_measure_for_metric(self, metric_reference: MetricReference) -> Optional[MetricInputMeasure]:
+        """Get input measure defined in the original metric config, if exists.
+
+        When SemanticModel is constructed, input measures from input metrics are added to the list of input measures
+        for a metric. Here, use rules about metric types to determine which input measures were defined in the config:
+        - Simple & cumulative metrics require one input measure, and can't take any input metrics.
+        - Derived & ratio metrics take no input measures, only input metrics.
+        """
         metric = self.get_metric(metric_reference=metric_reference)
         if metric.type is MetricType.CUMULATIVE or metric.type is MetricType.SIMPLE:
             assert len(metric.input_measures) == 1, "Simple and cumulative metrics should have one input measure."
@@ -115,6 +122,35 @@ class MetricLookup(MetricAccessor):  # noqa: D
             return None
         else:
             assert_values_exhausted(metric.type)
+
+    def measures_for_metric(
+        self,
+        metric_reference: MetricReference,
+        column_association_resolver: ColumnAssociationResolver,
+    ) -> Sequence[MetricInputMeasureSpec]:
+        """Return the measure specs required to compute the metric."""
+        metric = self.get_metric(metric_reference)
+        input_measure_specs: List[MetricInputMeasureSpec] = []
+
+        for input_measure in metric.input_measures:
+            measure_spec = MeasureSpec(
+                element_name=input_measure.name,
+                non_additive_dimension_spec=self._semantic_model_lookup.non_additive_dimension_specs_by_measure.get(
+                    input_measure.measure_reference
+                ),
+            )
+            spec = MetricInputMeasureSpec(
+                measure_spec=measure_spec,
+                constraint=WhereSpecFactory(
+                    column_association_resolver=column_association_resolver,
+                ).create_from_where_filter_intersection(input_measure.filter),
+                alias=input_measure.alias,
+                join_to_timespine=input_measure.join_to_timespine,
+                fill_nulls_with=input_measure.fill_nulls_with,
+            )
+            input_measure_specs.append(spec)
+
+        return tuple(input_measure_specs)
 
     def contains_cumulative_or_time_offset_metric(self, metric_references: Sequence[MetricReference]) -> bool:
         """Returns true if any of the specs correspond to a cumulative metric or a derived metric with time offset."""

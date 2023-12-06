@@ -23,8 +23,7 @@
                     <!-- include_spec =                           -->
                     <!--   {'class': 'MeasureSpec',               -->
                     <!--    'element_name': 'txn_count',          -->
-                    <!--    'non_additive_dimension_spec': None,  -->
-                    <!--    'fill_nulls_with': None}              -->
+                    <!--    'non_additive_dimension_spec': None}  -->
                     <!-- include_spec =                                                                     -->
                     <!--   {'class': 'DimensionSpec',                                                       -->
                     <!--    'element_name': 'customer_name',                                                -->
@@ -64,8 +63,7 @@
                             <!-- include_spec =                           -->
                             <!--   {'class': 'MeasureSpec',               -->
                             <!--    'element_name': 'txn_count',          -->
-                            <!--    'non_additive_dimension_spec': None,  -->
-                            <!--    'fill_nulls_with': None}              -->
+                            <!--    'non_additive_dimension_spec': None}  -->
                             <!-- include_spec =                               -->
                             <!--   {'class': 'TimeDimensionSpec',             -->
                             <!--    'element_name': 'ds_partitioned',         -->
